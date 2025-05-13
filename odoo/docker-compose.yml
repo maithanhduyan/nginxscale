@@ -1,0 +1,29 @@
+services:
+
+  odoo:
+    image: odoo:18.0
+    container_name: odoo
+    user: odoo
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped  
+    # ports:
+    #   - "8069:8069"
+    #   - "8072:8072"
+    environment:
+      - TZ=UTC
+    # command: apt update && apt install gsfonts -y
+    volumes:
+      - ./addons:/mnt/extra-addons # contain odoo dev modules
+      - ./conf:/etc/odoo # contain config
+      - ./web-data:/var/lib/odoo # contain odoo web data
+      - ./log:/var/log/odoo
+    networks:
+      - web
+
+
+networks:
+  web:
+    external: true
+    

@@ -1,0 +1,5 @@
+log/
+web-data/
+*.log
+odoo.conf
+.env

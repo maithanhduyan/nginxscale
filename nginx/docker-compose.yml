@@ -2,11 +2,11 @@ version: '3.8'
 
 services:
   nginx:
-    # image: nginx:latest
+    image: nginx:latest
     container_name: nginx
-    build: 
-      context: .
-      dockerfile: Dockerfile
+    # build: 
+    #   context: .
+    #   dockerfile: Dockerfile
     restart: unless-stopped
     ports:
       - "80:80" # public port
@@ -17,6 +17,21 @@ services:
       - ./ssl/letsencrypt:/etc/letsencrypt # Let's Encrypt SSL certificate
       - ./html:/var/www/html # static html web for example
       - ./log:/var/log/nginx/
+    environment:
+      - TZ=UTC
+    networks:
+      - web
+  
+  certbot:
+    container_name: certbot
+    image: certbot/certbot:latest
+    command: certbot renew
+    volumes:
+      - ./ssl/letsencrypt:/etc/letsencrypt
+      - ./certbot/logs:/var/log/letsencrypt
+      - ./html:/var/www/html # static html web for example
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    restart: unless-stopped
     environment:
       - TZ=UTC
     networks:

@@ -1,0 +1,20 @@
+services:
+ phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    env_file:
+      - .env
+    restart: always
+    environment:
+      PMA_HOST: ${MYSQL_HOST}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    ports:
+      - 8080:80
+    volumes:
+      - ./phpmyadmin:/etc/phpmyadmin
+    networks:
+      - web
+
+networks:
+  web:
+    external: true

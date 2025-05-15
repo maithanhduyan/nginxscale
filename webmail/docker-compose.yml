@@ -1,0 +1,36 @@
+services:
+
+  roundcube:
+    image: roundcube/roundcubemail:latest
+    container_name: roundcube
+    env_file:
+      - .env
+    networks:
+      - web
+    # ports:
+    #   - "8080:80"
+    volumes:
+      - ./roundcube-data:/var/roundcube
+    environment:
+      # ---- IMAP ----
+      ROUNDCUBEMAIL_DEFAULT_HOST: ${ROUNDCUBEMAIL_DEFAULT_HOST}
+      ROUNDCUBEMAIL_DEFAULT_PORT: 993
+      # ROUNDCUBEMAIL_IMAP_SSL: 1  # Bật SSL cho IMAP
+      # ROUNDCUBEMAIL_IMAP_OPTS: "/ssl"  # SSL options cho IMAP nếu cần thiết
+      # ---- SMTP ----
+      ROUNDCUBEMAIL_SMTP_SERVER: ${ROUNDCUBEMAIL_DEFAULT_HOST}
+      ROUNDCUBEMAIL_SMTP_PORT: 465
+      ROUNDCUBEMAIL_SMTP_USER: "%u"
+      ROUNDCUBEMAIL_SMTP_PASS: "%p"
+      # ROUNDCUBEMAIL_SMTP_SSL: 1  # Bật SSL cho SMTP
+      # ROUNDCUBEMAIL_SMTP_TLS: 0  # Không cần TLS nếu bạn sử dụng cổng 465 cho SMTP over SSL
+      # ---- Khác ----
+      ROUNDCUBEMAIL_UPLOAD_MAX_FILESIZE: 10M
+      ROUNDCUBEMAIL_SKIN: elastic
+      PHP_MEMORY_LIMIT: 256M
+      TZ: UTC
+    restart: unless-stopped
+
+networks:
+  web:
+    external: true

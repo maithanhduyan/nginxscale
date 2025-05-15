@@ -8,8 +8,8 @@ services:
     environment:
       PMA_HOST: ${MYSQL_HOST}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-    ports:
-      - 8080:80
+    # ports:
+    #   - 8080:80
     volumes:
       - ./phpmyadmin:/etc/phpmyadmin
     networks:
